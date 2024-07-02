@@ -2,9 +2,9 @@ const mysql = require('mysql2');
 
 // Se crea la conexión con los datos del servidor de la base de datos.
 const conn = mysql.createConnection({
-   host: 'localhost',
-   user: 'root',
-   password: '' 
+    host: 'localhost',
+    user: 'root',
+    password: '' 
 });
 
 conn.connect((err) => {
@@ -15,13 +15,25 @@ conn.connect((err) => {
     }
     console.log('Conexión con la base de datos exitosa.');
 
-    // Se crea la base de datos en caso de que no exista.
-    conn.query("CREATE DATABASE IF NOT EXISTS G11_TIF", (err, results) => {
-        if (err) {
-            console.error('Error al crear la base de datos. ',err);
-            return;
-        }
-        console.log('Base de datos creada con éxito.');
+// Comprobamos si la base de datos ya existe
+conn.query("SHOW DATABASES LIKE 'G11_TIF'", (err, results) => {
+    if (err) {
+        console.error('Error al comprobar la existencia de la base de datos. ', err);
+        return;
+    }
+
+    if (results.length > 0) {
+        console.log('La base de datos ya existe.');
+    } else {
+        // Si la base de datos no existe, la creamos
+        conn.query("CREATE DATABASE G11_TIF", (err, results) => {
+            if (err) {
+                console.error('Error al crear la base de datos. ', err);
+                return;
+            }
+            console.log('Base de datos creada con éxito.');
+        });
+    }
 
         // Se selecciona la base de datos para su uso.
         conn.changeUser({ database: 'G11_TIF' }, (err) => {
@@ -39,13 +51,24 @@ conn.connect((err) => {
                 );
             `;
             
-            conn.query(createProductoQuery,(err,results) => {
+            conn.query("SHOW TABLES LIKE 'producto'", (err, results) => {
                 if (err) {
-                    console.error('Error al crear tabla Producto. ',err);
+                    console.error('Error al verificar si la tabla Producto existe. ', err);
                     return;
                 }
-            });
-            console.log('Producto creada correctamente.')
+                
+                if (results.length > 0) {
+                    console.log('La tabla producto ya existe.');
+                } else {
+                    conn.query(createProductoQuery, (err, results) => {
+                        if (err) {
+                            console.error('Error al crear tabla Producto. ', err);
+                            return;
+                        }
+                        console.log('Producto creada correctamente.');
+                    });
+                }
+            })
 
 
             const createClienteQuery = `
@@ -57,13 +80,24 @@ conn.connect((err) => {
                 )
             `;
 
-            conn.query(createClienteQuery, (err,results) => {
+            conn.query("SHOW TABLES LIKE 'cliente'", (err, results) => {
                 if (err) {
-                    console.error('Error al crear tabla Cliente. ',err);
+                    console.error('Error al verificar si la tabla Cliente existe. ', err);
                     return;
                 }
-            });
-            console.log('Cliente creada correctamente.')
+                
+                if (results.length > 0) {
+                    console.log('La tabla cliente ya existe.');
+                } else {
+                    conn.query(createClienteQuery, (err, results) => {
+                        if (err) {
+                            console.error('Error al crear tabla Cliente. ', err);
+                            return;
+                        }
+                        console.log('Cliente creada correctamente.');
+                    });
+                }
+            })
 
 
             const createVentaQuery = `
@@ -76,13 +110,24 @@ conn.connect((err) => {
                 )
             `;
 
-            conn.query(createVentaQuery, (err,results) => {
+            conn.query("SHOW TABLES LIKE 'venta'", (err, results) => {
                 if (err) {
-                    console.error('Error al crear tabla Venta. ',err);
+                    console.error('Error al verificar si la tabla Venta existe. ', err);
                     return;
                 }
-            });
-            console.log('Venta creada correctamente.')
+                
+                if (results.length > 0) {
+                    console.log('La tabla venta ya existe.');
+                } else {
+                    conn.query(createVentaQuery, (err, results) => {
+                        if (err) {
+                            console.error('Error al crear tabla Venta. ', err);
+                            return;
+                        }
+                        console.log('Venta creada correctamente.');
+                    });
+                }
+            })
 
 
             const createDetalleVentaQuery = `
@@ -97,13 +142,24 @@ conn.connect((err) => {
                 )
             `;
 
-            conn.query(createDetalleVentaQuery, (err,results) => {
+            conn.query("SHOW TABLES LIKE 'detalle_venta'", (err, results) => {
                 if (err) {
-                    console.error('Error al crear tabla Detalle_Venta. ',err);
+                    console.error('Error al verificar si la tabla Detalle_venta existe. ', err);
                     return;
                 }
-            });
-            console.log('Detalle_Venta creada correctamente.')
+                
+                if (results.length > 0) {
+                    console.log('La tabla detalle_venta ya existe.');
+                } else {
+                    conn.query(createDetalleVentaQuery, (err, results) => {
+                        if (err) {
+                            console.error('Error al crear tabla Detalle_venta. ', err);
+                            return;
+                        }
+                        console.log('Detalle_venta creada correctamente.');
+                    });
+                }
+            })
 
         })
     });
