@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://kit.fontawesome.com/62d7384770.js" crossorigin="anonymous"></script>
+    <title>modeloTienda</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        header {
+    display: flex;
+    flex-flow: row nowrap;
+    background-color: #fff;
+    height: 10vh;
+}
+
+h1 {
+    align-content: center;
+    padding: 1rem;
+}
+
+nav {
+    display: flex;
+    width: 100%;
+}
+.nav-selector {
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+}
+.nav-item {
+    list-style: none;
+    align-content: center;
+    font-size: 1.4rem;
+}
+
+.nav-item > a {
+    text-decoration: none;
+    color: #000;
+}
+.nav-item > a:hover {
+    color: #46acff;
+    border-bottom: 1.4px solid #46acff;
+}
+    </style>
+</head>
+<body>
+    <!--HEADER & NAV-->
+    <header>
+        <h1>modeloTienda</h1>
+        <nav>
+            <ul class="nav-selector">
+                <li class="nav-item"><a class="nav-item-selector" href="index.html">INICIO</a></li>
+                <li class="nav-item"><a href="tienda.html">TIENDA</a></li>
+                <li class="nav-item"><a href="nosotros.html">NOSOTROS</a></li>
+                <li class="nav-item"><a href="contacto.html">CONTACTO</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h1>Editar productos</h1>
+        <% if (nombre) { %>
+        <!--enctype="multipart/form-data" es necesario para enviar archivos al back.-->
+        <form id="formulario" action="/update" method="POST">
+            <input id="id" name="id" value="<%= nombre.id %>" hidden>
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre"  value="<%= nombre.nombre %>"><br>
+            
+            <label for="descripcion">Descripcion:</label>
+            <input type="text" id="descripcion" name="descripcion"  value="<%= nombre.descripcion %>"><br>
+          
+            <label for="precio">Precio:</label>
+            <input type="float" id="precio" name="precio"  value="<%= nombre.precio %>"><br>
+
+            <div class="Botones">
+                <button type="submit">Guardar</button>
+                <a href="index.ejs">Cancelar</a>
+            </div>
+        </form>
+        <% } %>
+    </main>
+</body>
+</html>
